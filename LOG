@@ -1,0 +1,61 @@
+------------------------------------------------------------------------
+19/7/16
+Bug:
+	[-]	GetFootOfPerpendicular Function is not correct! The returned node is not on line.
+		* The ')' of sqrt function is wrong!
+	[-]	Also, need to check the result node is on line, not on the extension of a line.
+To be Finished:
+	[-]	Write the new special node file
+	[-]	Read the new speical node file
+	[-]	Add a schema to switch from different speical node file
+			* Different special node with different speical node number, we have too many fuel station currently
+			* A Folder that stores all the speical node files
+------------------------------------------------------------------------
+20/7/16			
+ADD:
+	Dijskstra with Fibonacci Heap support. Really Fast now!
+------------------------------------------------------------------------
+23/7/16
+ADD:
+	Pitu's EV <shortest walk Algorithm in pitu.cpp
+------------------------------------------------------------------------
+28/7/16
+ADD:
+	Temporal supported
+Bug:
+	[-]Mapping from original road ID to new road ID isnot correct, which results in failure of reading original speed profile
+To be Finished:
+	[-]Configuration Doc on Temporal 
+------------------------------------------------------------------------
+2/8/16
+Bug:
+	[-]Some nodes are still unreachable
+		* 2 to 312559
+		* Happens on the special nodes
+		* Can be tested by earliest arrival time computation
+------------------------------------------------------------------------
+31/8/16
+LOST ALL THE DATA ON 30/8/16!!!
+REMEMBER TO GIT EVERYDAY!!!		E!V!E!R!Y!D!A!Y!!!
+Recovery by loging to dewberry.mgmt.eait.uq.edu.au, open a console, map the live usb as a vitural usb and boot.
+Use Photorec to recover the whole data to dragon_data, and grep to filter the files.
+------------------------------------------------------------------------
+2/9/16
+Bug:
+	[-]The end nodes of the roads are all 0
+------------------------------------------------------------------------
+19/9/16
+Bug:
+	[-]Static CH cannot open the correct distance between two nodes
+	[]Time Dependent CH has not finished. The backward marking needs a new design.
+	[-]Static CH is too slow 
+------------------------------------------------------------------------
+7/12/17
+Work to do
+	Dewberry:
+		[-] Run a whole graph T2Hop
+	Dianella:
+		[] Re-partition the graph using natural cut
+		[] Try to find the termination condtion for each search
+		[] All pair between boundary nodes
+

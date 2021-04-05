@@ -1,0 +1,308 @@
+#include "road.h"
+#include "tools.h"
+
+typedef struct COMPARENODE
+{
+	pair<int, int> pif;//ID, distance
+	bool operator() (const struct COMPARENODE& a, const struct COMPARENODE& b) const  
+	{  
+		return a.pif.second > b.pif.second; 
+	} 
+}compareNode;
+
+
+
+//define a function to compute the shortest path with fibonacci_heap, another heap  is completed below.input start pointid
+//end pointid roadList, notime ?? no speed?? using Graph g which is defined in conf.h
+void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
+{
+	boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> > fHeap;
+	vector<int> vDistance(g.vNode.size(), INF);
+	vector<int> vPrevious(g.vNode.size(), -1); 
+	vector<bool> vbVisited(g.vNode.size(), false);
+	//vector<boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> >::handle_type> vHandler(g.vNode.size());
+	vector<int>::iterator ivD, ivP, ivNL;
+	int i;
+	int topNodeID, neighborNodeID, neighborRoadID;
+
+	int neighborLength=0;//初始化需要吗？？
+
+	vDistance[ID1] = 0;
+	compareNode cn;
+	cn.pif = make_pair(ID1, 0);//初始堆里的元素，推理放的是comparenode对象cn,cn.pif是id和当前distance
+	fHeap.push(cn);
+
+	compareNode cnTop;
+	while(!fHeap.empty())//every time a topnode is fixed if topid==id2,break.
+	{
+		cnTop = fHeap.top();
+		fHeap.pop();
+		//取出堆头元素top头部的意思，最短距离确定的点也是当前要使用的点。
+
+		//add
+		if(vbVisited[cnTop.pif.first]) continue;
+
+		topNodeID = cnTop.pif.first;
+		vbVisited[topNodeID] = true;
+		if(topNodeID == ID2) break;
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborNode.size(); i++)
+		{
+			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+			//roadLength  self add
+			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
+			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(startTime);
+			neighborLength = g.vRoad[neighborRoadID].length;
+
+			int d = vDistance[topNodeID] + neighborLength;
+			if(!vbVisited[neighborNodeID])
+			{
+				if(vDistance[neighborNodeID] > d)
+				{
+					vDistance[neighborNodeID] = d;
+					compareNode cn;
+					//改变的变量
+					cn.pif = make_pair(neighborNodeID, d);//优先队列里的元素,id距离对
+					fHeap.push(cn);//
+					vPrevious[neighborNodeID] = topNodeID;//vPrevious是Path最短路的前继节点。
+				}
+			}
+		}
+	}
+	
+	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+}
+//startTime: start shiKe curTime:daoDaDangQianDianDeShiKe
+void RoadNetwork::shortestPathDijkstraTimeDependent(int ID1, int ID2, int startTime)
+{
+	boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> > fHeap;
+	vector<int> vDistance(g.vNode.size(), INF);//distance from sourcenode to others
+	vector<int> vPrevious(g.vNode.size(), -1); 
+	vector<bool> vbVisited(g.vNode.size(), false);
+	//vector<boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> >::handle_type> vHandler(g.vNode.size());
+	vector<int>::iterator ivD, ivP, ivNL;
+	int i;
+	int topNodeID, neighborNodeID, neighborRoadID;
+
+	int neighborLength=0;
+	int curTime=startTime;
+
+	vDistance[ID1] = 0;
+	compareNode cn;
+	cn.pif = make_pair(ID1, 0);//初始堆里的元素，推理放的是comparenode对象cn,cn.pif是id和当前distance
+	fHeap.push(cn);
+
+	compareNode cnTop;
+	while(!fHeap.empty())//every time a topnode is fixed if topid==id2,break.
+	{
+		cnTop = fHeap.top();
+		fHeap.pop();
+		//取出堆头元素top头部的意思，最短距离确定的点也是当前要使用的点。
+
+		//add
+		if(vbVisited[cnTop.pif.first]) continue;
+
+		topNodeID = cnTop.pif.first;
+		vbVisited[topNodeID] = true;
+		if(topNodeID == ID2)	break;
+		curTime=startTime+vDistance[topNodeID];
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborNode.size(); i++)
+		{
+			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+			//roadLength  self add
+			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
+			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(curTime);
+			neighborLength = g.vRoad[neighborRoadID].length;
+
+			int d = vDistance[topNodeID] + neighborLength;
+			if(!vbVisited[neighborNodeID])
+			{
+				if(vDistance[neighborNodeID] > d)
+				{
+					vDistance[neighborNodeID] = d;
+					compareNode cn;
+					//改变的变量
+					cn.pif = make_pair(neighborNodeID, d);//优先队列里的元素,id距离对
+					fHeap.push(cn);//
+					vPrevious[neighborNodeID] = topNodeID;//vPrevious是Path最短路的前继节点。
+				}
+			}
+		}
+	}
+	
+	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+}
+
+/*
+void RoadNetwork::shortestPathDijkstra(int ID1, int ID2, vector<int>& vRoadList, int& distance)
+{
+	boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> > fHeap;
+	vector<int> vDistance(g.vNode.size(), INF);
+	vector<int> vPrevious(g.vNode.size(), -1); 
+	vector<bool> vbVisited(g.vNode.size(), false);
+	vector<boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> >::handle_type> vHandler(g.vNode.size());
+	vector<int>::iterator ivD, ivP, ivNL;
+	int i;
+	int topNodeID, neighborNodeID, neighborLength;
+	
+	vDistance[ID1] = 0;
+	compareNode cn;
+	cn.pif = make_pair(ID1, 0);
+	vHandler[ID1] = fHeap.push(cn);
+	int nV = 0;
+
+	compareNode cnTop;
+	while(!fHeap.empty())
+	{
+		cnTop = fHeap.top();
+		fHeap.pop();
+		topNodeID = cnTop.pif.first;
+		vbVisited[topNodeID] = true;
+		if(topNodeID == ID2)
+			break;
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborLength.size(); i++)
+		{
+			nV++;
+			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+			neighborLength = g.vNode[topNodeID].vNeighborLength[i];
+			if(vDistance[neighborNodeID] == INF && neighborNodeID != ID1)
+			{
+				int d = vDistance[topNodeID] + neighborLength;
+				vDistance[neighborNodeID] = d;
+				compareNode cn;
+				cn.pif = make_pair(neighborNodeID, d);
+				vHandler[neighborNodeID] = fHeap.push(cn);
+				vPrevious[neighborNodeID] = topNodeID;
+			}
+			else if(vDistance[neighborNodeID] > vDistance[topNodeID] + neighborLength)
+			{
+				vDistance[neighborNodeID] = vDistance[topNodeID] + neighborLength;
+				(*vHandler[neighborNodeID]).pif.second = vDistance[neighborNodeID];
+				fHeap.decrease(vHandler[neighborNodeID]);
+				vPrevious[neighborNodeID] = topNodeID;
+			}
+		}
+	}
+	
+	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+	distance = vDistance[ID2];
+	cout << g.vNode[ID1].x << "\t" << g.vNode[ID1].y << "\t" << g.vNode[ID2].x << "\t" << g.vNode[ID2].y << endl; 
+
+/*	cout << "Dijkstra Nodes:" << endl; 
+	int n = ID2;
+	int oldOrder = -1;
+	list<int> lNext;
+	list<int>::iterator ilNext;
+	while(n != -1)
+	{
+		lNext.push_front(n);
+		n = vPrevious[n];
+	}
+	for(ilNext = lNext.begin(); ilNext != lNext.end(); ilNext++)
+	{
+		cout << *ilNext << "\t" << vDistance[*ilNext] << "\t" << vRNodeOrder[*ilNext];
+		if(vRNodeOrder[*ilNext] > oldOrder)
+			cout << "\tlarger" << endl;  
+		else
+			cout << endl;
+		oldOrder = vRNodeOrder[*ilNext];
+	}
+**
+//	cout << "visit " << nV << " nodes" << endl;
+}
+*/
+
+void RoadNetwork::shortestPathDijkstraHeap(int ID1, int ID2, benchmark::heap<2,int, int>& queue, vector<int>& vRoadList, int& distance)
+{
+	queue.update(ID1, 0);
+
+	vector<int> vDistance(g.vNode.size(), INF);
+	vector<int> vPrevious(g.vNode.size(), -1);
+	vector<bool> vbVisited(g.vNode.size(), false);
+	vector<int>::iterator ivD, ivP, ivNL;
+	int i;
+	int topNodeID, neighborNodeID, neighborLength;
+	
+	vDistance[ID1] = 0;
+
+	compareNode cnTop;
+	while(!queue.empty())
+	{
+		int topDistance;
+		queue.extract_min(topNodeID, topDistance);
+		vbVisited[topNodeID] = true;
+		if(topNodeID == ID2)
+			break;
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborLength.size(); i++)
+		{
+			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+			neighborLength = g.vNode[topNodeID].vNeighborLength[i]; 
+			int d = vDistance[topNodeID] + neighborLength;
+			if(!vbVisited[neighborNodeID])
+			{
+				if(vDistance[neighborNodeID] > d)
+				{
+					vDistance[neighborNodeID] = d;
+					queue.update(neighborNodeID, d);
+				}
+			}
+		}
+	}
+	
+	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+	distance = vDistance[ID2];
+	cout << g.vNode[ID1].x << "\t" << g.vNode[ID1].y << "\t" << g.vNode[ID2].x << "\t" << g.vNode[ID2].y << endl; 
+}
+
+
+void RoadNetwork::shortestPathDijkstraHeap(int ID1, int ID2)
+{
+	//
+	benchmark::heap<3,int, int> queue;
+	queue.update(ID1, 0);
+	vector<int> vDistance(g.vNode.size(), INF);
+	vector<int> vPrevious(g.vNode.size(), -1);
+	vector<bool> vbVisited(g.vNode.size(), false);
+	vector<int>::iterator ivD, ivP, ivNL;
+	int i;
+	int topNodeID, neighborNodeID, neighborLength;
+	
+	vDistance[ID1] = 0;
+
+	compareNode cnTop;
+	while(!queue.empty())
+	{
+		int topDistance;
+		queue.extract_min(topNodeID, topDistance);
+		vbVisited[topNodeID] = true;
+		if(topNodeID == ID2)
+			break;
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborLength.size(); i++)
+		{
+			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+
+
+			//neighborLength = g.vNode[topNodeID].vNeighborLength[i]; 
+			//roadLength  self add
+			int neighborRoadID = 0;
+			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
+			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(0);
+			neighborLength = g.vRoad[neighborRoadID].length;
+			//complete
+
+			int d = vDistance[topNodeID] + neighborLength;
+			if(!vbVisited[neighborNodeID])
+			{
+				if(vDistance[neighborNodeID] > d)
+				{
+					vDistance[neighborNodeID] = d;
+					queue.update(neighborNodeID, d);
+				}
+			}
+		}
+	}
+	
+	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+	//distance = vDistance[ID2];
+	//cout << g.vNode[ID1].x << "\t" << g.vNode[ID1].y << "\t" << g.vNode[ID2].x << "\t" << g.vNode[ID2].y << endl; 
+}
+

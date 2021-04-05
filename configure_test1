@@ -1,0 +1,35 @@
+dataPath	./
+specialNode	off
+#specialNode	Parking		Use		10
+graphType	Temporal	1
+#graphType	Temporal	4.1
+#graphType	Static
+PathIndex	T2HOP
+#Index		QuadTree	7
+#PathIndex		SCH
+#PathIndex		DTCH
+#Test		cheapestAlgorithms		9.1|1.5|25200|36000
+#Test		DijkstraShortestPath	test
+#Test		cheapestPathOriginal	EA
+#Test		cheapestPathNoParking	EA
+#Test		cheapestPathParking		EA
+#Test		SCH						test
+#nodeFile ../data/beijing/beijingNode
+#edgeFile ../data/beijing/beijingRoad
+#trajectoryFile ../data/beijing/beijingTrajectory
+#
+File	../data/beijing/beijingSpeed
+#interval	0	5
+#avgSpeedFile	../data/beijing/beijingAvgSpeed
+#isoRoadFile	../data/beijing/beijingIsoRoad
+#isoNodeFile ../data/beijing/beijingIsoNode
+#nodeMapFile	../data/beijing/beijingNodeMap
+#dataPath	../data/
+#splitType	Slot
+#MS			ST
+#testNum	100
+#ratio	8
+#Daily	4.1
+#testDay	test
+#CPath	2015.04.01
+#Grid	4	39.4167	41.0833	115.375	117.5
