@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <boost/heap/fibonacci_heap.hpp>
 #include <fstream>
+//struct 
 #include "structures.h"
 
 #define INF 999999999

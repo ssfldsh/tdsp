@@ -29,11 +29,11 @@ typedef struct ROAD
 	vector<int>	vCostT;
 	vector<int>	vCostC;
 }road;
-typedef struct NEIBOR
+typedef struct NEIGHBOR
 {
-	long int neiborNodeID;
-	long int neiborRoadID;
-}neibor;
+	long int neighborNodeID;
+	long int neighborRoadID;
+}neighbor;
 typedef struct NODE
 {
 	long int	nodeID;
@@ -43,7 +43,7 @@ typedef struct NODE
 	double	y;
 	bool	isolated;
 	long int 	newNeighborNode;
-	vector<neibor> vNeibor;			//out neibor node id and out neibor road id
+	vector<neighbor> vNeighbor;			//out neibor node id and out neibor road id
 	
 	set<int>	sNeighborNode;		//in-out neighbor node
 	set<int>	sNeighborRoad;		//in-out neighbor road

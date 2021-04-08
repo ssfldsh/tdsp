@@ -202,8 +202,7 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 	cout << "Forward Search " << sourceID << endl;
 	boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> > fHeap;
 	vector<boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> >::handle_type> vHandler(g.vNode.size());
-	vector<int> vTime(g.vNode.size(), INF);  //vDistance
-	//no Previous ??
+	vector<int> vTime(g.vNode.size(), INF);  
 	vector<bool> vbHeap(g.vNode.size(), false);//Store if in Heap
 	vector<bool> bVisited(g.vNode.size(), false);
 
@@ -230,7 +229,6 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 		topNodeID = cnTop.pif.first;
 		vbHeap[topNodeID] = false;
 		bVisited[topNodeID] = true;
-
 		posST = vmInHop[topNodeID][sourceID];
 	
 //		cout << "Visiting "  << topNodeID << endl;
@@ -239,19 +237,13 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 			bUpdated = false;
 			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
 			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];
-
 //			cout << "Neighbor:" << neighborNodeID << endl;
 			if(neighborNodeID == sourceID)
 				continue;
-
-
 			minCost = vTime[neighborNodeID];
-
-			//lpf of topNode--->>neighborNode
 			LPFunction lpf;
 			if(topNodeID == sourceID)
 				lpf = g.vRoad[neighborRoadID].costFunction;
-			//need to see
 			else
 				lpf =vvpInHop[topNodeID][posST].second.LPFCat(g.vRoad[neighborRoadID].costFunction);   
 		
@@ -272,10 +264,8 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 					bUpdated = true;
 				}
 			}
-
-			//vTime[neighborNodeID] = minCost;source to neibor de shortest
-			minCost = vvpInHop[neighborNodeID][posSN].second.getMin(); 
 			
+			minCost = vvpInHop[neighborNodeID][posSN].second.getMin(); 
 //			if(bUpdated)
 //				cout << "Update!" << endl;
 
@@ -288,7 +278,6 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 				vHandler[neighborNodeID] = fHeap.push(cn);
 				vbHeap[neighborNodeID] = true;
 				bVisited[neighborNodeID] = true;
-				//vprevious[neibor]=topnodeID
 			}
 			//Updated and in Heap, key changed
 			else if(bUpdated && vbHeap[neighborNodeID])
@@ -296,9 +285,6 @@ void T2Hop::forwardSearch(int sourceID, Graph& g)
 				vTime[neighborNodeID] = minCost;
 				(*vHandler[neighborNodeID]).pif.second = vTime[neighborNodeID];
 				fHeap.decrease(vHandler[neighborNodeID]);
-				//pre ?? which paper 
-				//solve what 
-				//what assumption
 			}
 		}
 	}

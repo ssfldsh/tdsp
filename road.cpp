@@ -45,13 +45,12 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 		topNodeID = cnTop.pif.first;
 		vbVisited[topNodeID] = true;
 		if(topNodeID == ID2) break;
-		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborNode.size(); i++)
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighbor.size(); i++)
 		{
-			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
+			neighborNodeID = g.vNode[topNodeID].vNeighbor[i].neighborNodeID;
 			//roadLength  self add
-			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
-			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(startTime);
-			neighborLength = g.vRoad[neighborRoadID].length;
+			neighborRoadID = g.vNode[topNodeID].vNeighbor[i].neighborRoadID;
+			neighborLength = g.vRoad[neighborRoadID].costFunction.getY(startTime);
 
 			int d = vDistance[topNodeID] + neighborLength;
 			if(!vbVisited[neighborNodeID])
@@ -105,13 +104,11 @@ void RoadNetwork::shortestPathDijkstraTimeDependent(int ID1, int ID2, int startT
 		vbVisited[topNodeID] = true;
 		if(topNodeID == ID2)	break;
 		curTime=startTime+vDistance[topNodeID];
-		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborNode.size(); i++)
+		for(i = 0; i < (int)g.vNode[topNodeID].vNeighbor.size(); i++)
 		{
-			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
-			//roadLength  self add
-			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
-			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(curTime);
-			neighborLength = g.vRoad[neighborRoadID].length;
+			neighborNodeID = g.vNode[topNodeID].vNeighbor[i].neighborNodeID;
+			neighborRoadID = g.vNode[topNodeID].vNeighbor[i].neighborRoadID;
+			neighborLength = g.vRoad[neighborRoadID].costFunction.getY(curTime);
 
 			int d = vDistance[topNodeID] + neighborLength;
 			if(!vbVisited[neighborNodeID])
@@ -217,99 +214,3 @@ void RoadNetwork::shortestPathDijkstra(int ID1, int ID2, vector<int>& vRoadList,
 //	cout << "visit " << nV << " nodes" << endl;
 }
 */
-
-void RoadNetwork::shortestPathDijkstraHeap(int ID1, int ID2, benchmark::heap<2,int, int>& queue, vector<int>& vRoadList, int& distance)
-{
-	queue.update(ID1, 0);
-
-	vector<int> vDistance(g.vNode.size(), INF);
-	vector<int> vPrevious(g.vNode.size(), -1);
-	vector<bool> vbVisited(g.vNode.size(), false);
-	vector<int>::iterator ivD, ivP, ivNL;
-	int i;
-	int topNodeID, neighborNodeID, neighborLength;
-	
-	vDistance[ID1] = 0;
-
-	compareNode cnTop;
-	while(!queue.empty())
-	{
-		int topDistance;
-		queue.extract_min(topNodeID, topDistance);
-		vbVisited[topNodeID] = true;
-		if(topNodeID == ID2)
-			break;
-		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborLength.size(); i++)
-		{
-			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
-			neighborLength = g.vNode[topNodeID].vNeighborLength[i]; 
-			int d = vDistance[topNodeID] + neighborLength;
-			if(!vbVisited[neighborNodeID])
-			{
-				if(vDistance[neighborNodeID] > d)
-				{
-					vDistance[neighborNodeID] = d;
-					queue.update(neighborNodeID, d);
-				}
-			}
-		}
-	}
-	
-	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
-	distance = vDistance[ID2];
-	cout << g.vNode[ID1].x << "\t" << g.vNode[ID1].y << "\t" << g.vNode[ID2].x << "\t" << g.vNode[ID2].y << endl; 
-}
-
-
-void RoadNetwork::shortestPathDijkstraHeap(int ID1, int ID2)
-{
-	//
-	benchmark::heap<3,int, int> queue;
-	queue.update(ID1, 0);
-	vector<int> vDistance(g.vNode.size(), INF);
-	vector<int> vPrevious(g.vNode.size(), -1);
-	vector<bool> vbVisited(g.vNode.size(), false);
-	vector<int>::iterator ivD, ivP, ivNL;
-	int i;
-	int topNodeID, neighborNodeID, neighborLength;
-	
-	vDistance[ID1] = 0;
-
-	compareNode cnTop;
-	while(!queue.empty())
-	{
-		int topDistance;
-		queue.extract_min(topNodeID, topDistance);
-		vbVisited[topNodeID] = true;
-		if(topNodeID == ID2)
-			break;
-		for(i = 0; i < (int)g.vNode[topNodeID].vNeighborLength.size(); i++)
-		{
-			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
-
-
-			//neighborLength = g.vNode[topNodeID].vNeighborLength[i]; 
-			//roadLength  self add
-			int neighborRoadID = 0;
-			neighborRoadID = g.vNode[topNodeID].vNeighborRoad[i];//add
-			g.vRoad[neighborRoadID].length=g.vRoad[neighborRoadID].costFunction.getY(0);
-			neighborLength = g.vRoad[neighborRoadID].length;
-			//complete
-
-			int d = vDistance[topNodeID] + neighborLength;
-			if(!vbVisited[neighborNodeID])
-			{
-				if(vDistance[neighborNodeID] > d)
-				{
-					vDistance[neighborNodeID] = d;
-					queue.update(neighborNodeID, d);
-				}
-			}
-		}
-	}
-	
-	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
-	//distance = vDistance[ID2];
-	//cout << g.vNode[ID1].x << "\t" << g.vNode[ID1].y << "\t" << g.vNode[ID2].x << "\t" << g.vNode[ID2].y << endl; 
-}
-

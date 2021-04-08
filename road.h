@@ -18,6 +18,7 @@
 #include <boost/bind.hpp>
 #include <boost/multi_array.hpp> 
 #include <boost/array.hpp>
+#include <unordered_map>
 #include <queue>
 #include "tools.h"
 #include "TimeDependent2Hop.h"
@@ -77,19 +78,12 @@ public:
 	int		writeSCH();
 	int		buildCHDijkstra(int ID1, int ID2, int dThreshold, vector<bool>& vbVisited, int dUV, map<int, vector<pair<int, int> > > mvpX, vector<vector<pair<int, int> > > &vvOutNode, vector<vector<pair<int, int> > > &vvInNode, vector<pair<int, int> >& vW, int& vEdge, map<int, vector<pair<int, int> > > &mIn, map<int, vector<pair<int, int> > >& mOut);
 
-//Implemented in TCH.cpp
-	Semaphore *smTCH = new Semaphore(40);            
+           
 	vector<vector<pair<int, int> > > vvpShortCut;//out-shortcut
 	vector<vector<pair<int, int> > > vvpRShortCut;//in-shortcut
 	//overlay graph, neighbor order are higher than current node
 	//Also contains shortcuts
-	vector<unordered_map<int, LPFunction> > vmOutNeighbor;
-	vector<unordered_map<int, LPFunction> > vmInNeighbor;
-	vector<vector<int> > vvOutNeighbor;
-	vector<vector<int> > vvInNeighbor;
-	
-	vector<unordered_map<int, vector<bool> > > vmOutNeighborARC;//TSHARC
-	vector<unordered_map<int, vector<bool> > > vmInNeighborARC;
+
 	void	TSHARCSpace();
 /*	void	loadTSHARC();
 	bool	hasTSHARC();
