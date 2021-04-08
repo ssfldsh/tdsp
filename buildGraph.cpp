@@ -16,7 +16,7 @@ int RoadNetwork::buildMapGraph()
 //		loadIndex();
 	}
 	if(conf->bTemporal)//exe
-		//readSpeedProfile();
+		readSpeedProfile();
 	return 0;
 }
 

@@ -41,7 +41,7 @@ int Configuration::readConfiguration()
 			{
 				dataFolder = vs[1] + city + "/";
 				findNewGraphFile();
-				if(!bNewGraphFile)//no execute
+				if(!bNewGraphFile)
 				{
 					nodeFile = dataFolder + city + "Node";
 					roadFile = dataFolder + city + "Road";
@@ -338,7 +338,7 @@ void Configuration::confInit()
 	bIndex		= false;
 	bPathIndex	= false;
 	bQuadTree	= false;
-	bNewGraphFile = false;
+	bNewGraphFile = true;
 	bTemporal	= false;
 	hasNewSP	= false;
 	bSPNew		= false;
