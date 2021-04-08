@@ -34,6 +34,7 @@ public:
 	RoadNetwork(char* argv[]);
 
 	int		buildBackgroundGraph();	//Build the graph from the original node and road
+	int 	buildMapGraph();//build from map data
 	int		createNewGraphFile();
 	bool	hasNewGraph();
 	int		readOrgNodeMap();
@@ -44,6 +45,7 @@ public:
 	int		writeNewRoad();
 	int		readRoad();
 	int		readNode();
+	int 	readMap();
 
 	void	analysis();//fix the neighbor problem
 

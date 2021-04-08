@@ -51,6 +51,7 @@ int Configuration::readConfiguration()
 				}
 				else
 				{
+					mapFile = dataFolder + city + "MapNew";
 					nodeFile = dataFolder + city + "NodeNew";
 					roadFile = dataFolder + city + "RoadNew";
 					isoNodeFile = dataFolder + city + "IsoNodeNew";

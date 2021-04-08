@@ -11,12 +11,12 @@
 
 typedef struct ROAD
 {
-	int		roadID;
-	int		ID1, ID2;		
+	long int		roadID;
+	long int		ID1, ID2;		
 	int		direction;	//A6
 	float	length;		//A13
 	bool	isolated;
-	set<int>	sNeighborRoad;	//connected road,include main 
+	set<long int>	sNeighborRoad;	//connected road,include main 
 	vector<pair<double, double> > vpRoadDetail;	//Road line detail
 	
 	double	orgRoadID;		//A2
@@ -29,16 +29,22 @@ typedef struct ROAD
 	vector<int>	vCostT;
 	vector<int>	vCostC;
 }road;
-
+typedef struct NEIBOR
+{
+	long int neiborNodeID;
+	long int neiborRoadID;
+}neibor;
 typedef struct NODE
 {
-	int		nodeID;
+	long int	nodeID;
 	int		type;	//A5,0123
 	bool	bSpecial;
 	double	x;
 	double	y;
 	bool	isolated;
-	int 	newNeighborNode;	
+	long int 	newNeighborNode;
+	vector<neibor> vNeibor;			//out neibor node id and out neibor road id
+	
 	set<int>	sNeighborNode;		//in-out neighbor node
 	set<int>	sNeighborRoad;		//in-out neighbor road
 	vector<int>		vNeighborNode;	//Out-neighbor
@@ -61,8 +67,14 @@ typedef struct NODE
 
 typedef struct GRAPH
 {
-	vector<node>	vNode;
-	vector<road>	vRoad;
+	//using hash map is more okay but should change the lpf function(which is dependent on vector road)
+	//vector<node>	vNode;
+	//change
+	map<long int, node> vNode;
+	//vector<road>	vRoad;
+	//add
+	map<long int, road> vRoad;
+	//vRoad.resize(100000000);
 }Graph;
 
 

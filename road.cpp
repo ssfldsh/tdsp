@@ -40,7 +40,7 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 		//取出堆头元素top头部的意思，最短距离确定的点也是当前要使用的点。
 
 		//add
-		if(vbVisited[cnTop.pif.first]) continue;
+		if(vbVisited[cnTop.pif.first]) continue;//can also delete fq.remove()
 
 		topNodeID = cnTop.pif.first;
 		vbVisited[topNodeID] = true;
@@ -68,7 +68,7 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 			}
 		}
 	}
-	
+
 	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
 }
 //startTime: start shiKe curTime:daoDaDangQianDianDeShiKe
@@ -164,6 +164,12 @@ void RoadNetwork::shortestPathDijkstra(int ID1, int ID2, vector<int>& vRoadList,
 			nV++;
 			neighborNodeID = g.vNode[topNodeID].vNeighborNode[i];
 			neighborLength = g.vNode[topNodeID].vNeighborLength[i];
+
+
+			//ask for not visited???? no use visited is ok
+
+
+			//if this node is not ever watched Initial
 			if(vDistance[neighborNodeID] == INF && neighborNodeID != ID1)
 			{
 				int d = vDistance[topNodeID] + neighborLength;
@@ -173,6 +179,7 @@ void RoadNetwork::shortestPathDijkstra(int ID1, int ID2, vector<int>& vRoadList,
 				vHandler[neighborNodeID] = fHeap.push(cn);
 				vPrevious[neighborNodeID] = topNodeID;
 			}
+			//if has been watched and modified Renew
 			else if(vDistance[neighborNodeID] > vDistance[topNodeID] + neighborLength)
 			{
 				vDistance[neighborNodeID] = vDistance[topNodeID] + neighborLength;

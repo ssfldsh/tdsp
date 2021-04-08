@@ -18,6 +18,7 @@ public:
 
 	string	city;
 	string	dataFolder;			//base data folder
+	string  mapFile;
 	string	nodeFile;
 	string	roadFile;
 	string  isoNodeFile;

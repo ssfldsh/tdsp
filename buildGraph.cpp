@@ -24,7 +24,9 @@ RoadNetwork::RoadNetwork(char* argv[])
 		}	
 	}
 	else//exe
-		buildBackgroundGraph();
+		//modified
+		//buildBackgroundGraph();
+		buildMapGraph();
 
 	if(conf->bTest)
 		bTest = true;
@@ -307,6 +309,19 @@ int RoadNetwork::buildBackgroundGraph()
 			readSpeedProfile();
 	}
 
+	return 0;
+}
+
+int RoadNetwork::buildMapGraph()
+{
+	cout << "Building Background Graph" << endl;
+	readMap();
+	if(conf->bBuild)//noexe
+	{
+//		loadIndex();
+	}
+	if(conf->bTemporal)//exe
+		//readSpeedProfile();
 	return 0;
 }
 
@@ -788,6 +803,50 @@ int RoadNetwork::readRoad()
 		ifRoadMap.close();
 	}
 
+	return 0;
+}
+
+int RoadNetwork::readMap()
+{
+	//readRoad
+	ifstream inMapFile(conf->mapFile.c_str());
+	if(!inMapFile)
+	{
+		cout << "Cannot open new map file" << conf->mapFile << endl;
+		return -1;
+	}
+	cout << "Reading new Map File: " << conf->mapFile << endl;//exe
+
+	long int roadNum = 0;
+	inMapFile >> roadNum;
+	cout << "Road Number:" << roadNum << endl;
+	int i;
+	for(i = 0; i < roadNum; i++)
+	{
+		road r;
+		node startNode;
+		node endNode;
+		int speedLimit;//no use
+		inMapFile >> r.roadID >> r.ID1>> r.ID2  >> r.direction >> r.length >>speedLimit >> startNode.x >>startNode.y >>endNode.x>>endNode.y;
+		startNode.nodeID = r.ID1;
+		endNode.nodeID = r.ID2;
+		neibor nei;
+		nei.neiborNodeID = r.ID2;
+		nei.neiborRoadID = r.roadID;
+		//neiborNode and neiborRoad
+		startNode.vNeibor.push_back(nei);
+		r.isolated = false;
+		startNode.bSpecial=false;
+		startNode.isolated=false;
+		startNode.type=0;
+		endNode.bSpecial=false;
+		endNode.isolated=false;
+		endNode.type=0;
+		g.vRoad[r.roadID]=r;
+		g.vNode[r.ID1]=startNode;
+		g.vNode[r.ID2]=endNode;
+	}
+	inMapFile.close();
 	return 0;
 }
 
