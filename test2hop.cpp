@@ -14,5 +14,6 @@ int main(int argc, char* argv[])
 	cout<<r->g.vNode[20000670989].nodeID<<endl;
 	cout<<r->g.vNode.size()<<endl;
 	cout<<r->g.vRoad.size()<<endl;
+	//test every road start end length neighbor
 	return 0;
 }
