@@ -59,6 +59,7 @@ public:
 		upperBound = uBound;
 		this->bArrival = bArrival;
 		this->bValid = bValid;
+		//main function change vX vY
 		this->setValue(vX, vY);
 	}
 

@@ -28,11 +28,12 @@ int RoadNetwork::readNewSpeedProfile()
 			cout << "Cannot Find " << conf->costFile << endl;
 			return -1;
 		}
-		cout << "Reading Speed Profile Old:" << conf->costFile << endl;
+		cout << "Reading Speed Profile:" << conf->costFile << endl;
 	
 		double cost;
 		int num, i, t;
 		int roadID;
+		//read each line
 		while(ifSP >> roadID)
 		{
 			vector<int> vX, vY;
@@ -44,11 +45,11 @@ int RoadNetwork::readNewSpeedProfile()
 				ifSP >> t >> cost;  
 				vX[i] = t;    
 				vY[i] = cost;
-
 				//For old algorithms, to be removed
 //				g.vRoad[roadID].vCostT.push_back(t);
 //				g.vRoad[roadID].vCostC.push_back(cost);
 			}
+			//LPFunction is vX[], vY[], minY,maxY, upperbound=last read De t, input file Li each line's max t
 			LPFunction f = LPFunction(g.vRoad[roadID].ID1, g.vRoad[roadID].ID2, t, vX, vY);  
 			g.vRoad[roadID].costFunction = f;
 		}

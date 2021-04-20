@@ -236,6 +236,7 @@ pair<int, int>	LPFunction::getTimeDomain() const
 
 int	LPFunction::getY(int x) const
 {
+	//if this node has no speed profile
 	if(vX.empty())
 		throw runtime_error("The function is Empty!");
 

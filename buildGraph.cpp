@@ -4,17 +4,12 @@ RoadNetwork::RoadNetwork(char* argv[])
 {
 	conf = new Configuration();
 	buildMapGraph();
-	//readSpeedProfile();
 }
 
 int RoadNetwork::buildMapGraph()
 {
 	cout << "Building Background Graph" << endl;
 	readMap();
-	if(conf->bBuild)//noexe
-	{
-//		loadIndex();
-	}
 	if(conf->bTemporal)//exe
 		readSpeedProfile();
 	return 0;

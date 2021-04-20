@@ -50,6 +50,7 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 			neighborNodeID = g.vNode[topNodeID].vNeighbor[i].neighborNodeID;
 			//roadLength  self add
 			neighborRoadID = g.vNode[topNodeID].vNeighbor[i].neighborRoadID;
+			//if has speedprofile vX.size!=0
 			neighborLength = g.vRoad[neighborRoadID].costFunction.getY(startTime);
 
 			int d = vDistance[topNodeID] + neighborLength;
