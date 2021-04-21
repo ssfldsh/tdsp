@@ -41,6 +41,7 @@ int RoadNetwork::readNewSpeedProfile()
 		{
 			ifSP >> num;
 			ifSP >> t >> cost; 
+			//
 			g.vRoad[roadID].length = cost;
 		}
 		ifSP.close();

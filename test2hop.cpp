@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	// 	cout << (*ivRoad).roadID << " Cost Fucntion:" << endl;
 	// 	(*ivRoad).costFunction.display();
 	// }
-	cout<<r->g.vNode[20000670989].nodeID<<endl;
+	cout<<r->g.vNode[20000670988].nodeID<<endl;
 	cout<<r->g.vNode.size()<<endl;
 	cout<<r->g.vRoad.size()<<endl;
 	//test every road start end length neighbor

@@ -37,7 +37,8 @@ int RoadNetwork::readMap()
 		// node startNode;
 		// node endNode;
 		int speedLimit;//no use
-		inMapFile >> r.roadID >> r.ID1>> r.ID2  >> r.direction >> r.length >>speedLimit >> g.vNode[r.ID1].x >>g.vNode[r.ID1].y >>g.vNode[r.ID2].x>>g.vNode[r.ID2].y;
+		double x1,y1,x2,y2;
+		inMapFile >> r.roadID >> r.ID1>> r.ID2  >> r.direction >> r.length >>speedLimit >> x1 >> y1 >> x2 >> y2;
 		r.isolated = false;
 		g.vRoad[r.roadID]=r;
 		//road has been added
@@ -45,6 +46,10 @@ int RoadNetwork::readMap()
 		neighbor nei;
 		nei.neighborNodeID = r.ID2;
 		nei.neighborRoadID = r.roadID;
+		g.vNode[r.ID1].x = x1;
+		g.vNode[r.ID1].y = y1;
+		g.vNode[r.ID2].x = x2;
+		g.vNode[r.ID2].y = y2;
 		g.vNode[r.ID1].vNeighbor.push_back(nei);
 		g.vNode[r.ID1].bSpecial=false;
 		g.vNode[r.ID1].isolated=false;
