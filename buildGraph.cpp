@@ -34,27 +34,24 @@ int RoadNetwork::readMap()
 	for(i = 0; i < roadNum; i++)
 	{
 		road r;
-		node startNode;
-		node endNode;
+		// node startNode;
+		// node endNode;
 		int speedLimit;//no use
-		inMapFile >> r.roadID >> r.ID1>> r.ID2  >> r.direction >> r.length >>speedLimit >> startNode.x >>startNode.y >>endNode.x>>endNode.y;
-		startNode.nodeID = r.ID1;
-		endNode.nodeID = r.ID2;
+		inMapFile >> r.roadID >> r.ID1>> r.ID2  >> r.direction >> r.length >>speedLimit >> g.vNode[r.ID1].x >>g.vNode[r.ID1].y >>g.vNode[r.ID2].x>>g.vNode[r.ID2].y;
+		r.isolated = false;
+		g.vRoad[r.roadID]=r;
+		//road has been added
+		//now modify node
 		neighbor nei;
 		nei.neighborNodeID = r.ID2;
 		nei.neighborRoadID = r.roadID;
-		//neiborNode and neiborRoad
-		startNode.vNeighbor.push_back(nei);
-		r.isolated = false;
-		startNode.bSpecial=false;
-		startNode.isolated=false;
-		startNode.type=0;
-		endNode.bSpecial=false;
-		endNode.isolated=false;
-		endNode.type=0;
-		g.vRoad[r.roadID]=r;
-		g.vNode[r.ID1]=startNode;
-		g.vNode[r.ID2]=endNode;
+		g.vNode[r.ID1].vNeighbor.push_back(nei);
+		g.vNode[r.ID1].bSpecial=false;
+		g.vNode[r.ID1].isolated=false;
+		g.vNode[r.ID1].type=0;
+		g.vNode[r.ID2].bSpecial=false;
+		g.vNode[r.ID2].isolated=false;
+		g.vNode[r.ID2].type=0;
 	}
 	inMapFile.close();
 	return 0;

@@ -15,5 +15,9 @@ int main(int argc, char* argv[])
 	cout<<r->g.vNode.size()<<endl;
 	cout<<r->g.vRoad.size()<<endl;
 	//test every road start end length neighbor
+	r->shortestPathDijkstraStatic(288965,20000670988);
+	r->shortestPathDijkstraStatic(288965,20000671007);
+	r->shortestPathDijkstraStatic(309504,20000671007);
+	r->shortestPathDijkstraStatic(302230,530223);
 	return 0;
 }

@@ -3,7 +3,7 @@
 
 typedef struct COMPARENODE
 {
-	pair<int, int> pif;//ID, distance
+	pair<long int, double> pif;//ID, distance
 	bool operator() (const struct COMPARENODE& a, const struct COMPARENODE& b) const  
 	{  
 		return a.pif.second > b.pif.second; 
@@ -14,18 +14,28 @@ typedef struct COMPARENODE
 
 //define a function to compute the shortest path with fibonacci_heap, another heap  is completed below.input start pointid
 //end pointid roadList, notime ?? no speed?? using Graph g which is defined in conf.h
-void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
+void RoadNetwork::shortestPathDijkstraStatic(long int ID1, long int ID2)
 {
 	boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> > fHeap;
-	vector<int> vDistance(g.vNode.size(), INF);
-	vector<int> vPrevious(g.vNode.size(), -1); 
-	vector<bool> vbVisited(g.vNode.size(), false);
+	map<long int, double> vDistance;
+	map<long int, long int> vPrevious; 
+	map<long int, bool> vbVisited;
+	map<long int, node>::iterator NodeIterator;
+	for(NodeIterator=g.vNode.begin(); NodeIterator!=g.vNode.end(); NodeIterator++){
+		vDistance[(*NodeIterator).first]=INF;
+	}
+	for(NodeIterator=g.vNode.begin(); NodeIterator!=g.vNode.end(); NodeIterator++){
+		vPrevious[(*NodeIterator).first]=-1;
+	}
+	for(NodeIterator=g.vNode.begin(); NodeIterator!=g.vNode.end(); NodeIterator++){
+		vbVisited[(*NodeIterator).first]=false;
+	}
 	//vector<boost::heap::fibonacci_heap<compareNode, boost::heap::compare<compareNode> >::handle_type> vHandler(g.vNode.size());
-	vector<int>::iterator ivD, ivP, ivNL;
-	int i;
-	int topNodeID, neighborNodeID, neighborRoadID;
+	//vector<int>::iterator ivD, ivP, ivNL;
+	//int i;
+	long int topNodeID, neighborNodeID, neighborRoadID;
 
-	int neighborLength=0;//初始化需要吗？？
+	double neighborLength=0;//初始化需要吗？？
 
 	vDistance[ID1] = 0;
 	compareNode cn;
@@ -45,15 +55,15 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 		topNodeID = cnTop.pif.first;
 		vbVisited[topNodeID] = true;
 		if(topNodeID == ID2) break;
-		for(i = 0; i < (int)g.vNode[topNodeID].vNeighbor.size(); i++)
+		for(int i = 0; i < (int)g.vNode[topNodeID].vNeighbor.size(); i++)
 		{
 			neighborNodeID = g.vNode[topNodeID].vNeighbor[i].neighborNodeID;
 			//roadLength  self add
 			neighborRoadID = g.vNode[topNodeID].vNeighbor[i].neighborRoadID;
 			//if has speedprofile vX.size!=0
-			neighborLength = g.vRoad[neighborRoadID].costFunction.getY(startTime);
+			neighborLength = g.vRoad[neighborRoadID].length;
 
-			int d = vDistance[topNodeID] + neighborLength;
+			double d = vDistance[topNodeID] + neighborLength;
 			if(!vbVisited[neighborNodeID])
 			{
 				if(vDistance[neighborNodeID] > d)
@@ -70,6 +80,8 @@ void RoadNetwork::shortestPathDijkstraStatic(int ID1, int ID2, int startTime)
 	}
 
 	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+	//path
+
 }
 //startTime: start shiKe curTime:daoDaDangQianDianDeShiKe
 void RoadNetwork::shortestPathDijkstraTimeDependent(int ID1, int ID2, int startTime)

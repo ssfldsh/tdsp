@@ -204,7 +204,7 @@ public:
 	void	testT2HopGridInterISFP();
 
 //Implemented in road.cpp
-	void	shortestPathDijkstraStatic(int ID1, int ID2, int startTime);
+	void	shortestPathDijkstraStatic(long int ID1, long int ID2);
 	void 	shortestPathDijkstraTimeDependent(int ID1, int ID2, int startTime);
 	void    shortestPathDijkstraHeap(int ID1, int ID2);
 	void	shortestPathDijkstra(int ID1, int ID2, vector<int>& vRoadList, int& distance);
