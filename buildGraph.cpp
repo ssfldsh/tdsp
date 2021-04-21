@@ -46,6 +46,8 @@ int RoadNetwork::readMap()
 		neighbor nei;
 		nei.neighborNodeID = r.ID2;
 		nei.neighborRoadID = r.roadID;
+		g.vNode[r.ID1].nodeID=r.ID1;
+		g.vNode[r.ID2].nodeID=r.ID2;
 		g.vNode[r.ID1].x = x1;
 		g.vNode[r.ID1].y = y1;
 		g.vNode[r.ID2].x = x2;

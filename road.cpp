@@ -80,9 +80,27 @@ void RoadNetwork::shortestPathDijkstraStatic(long int ID1, long int ID2)
 	}
 
 	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
-	//path
-
+	//no path
+	if(vPrevious[ID2]==-1) {
+		cout<<"path from "<<ID1<<" to "<<ID2<<" : "<<"no path"<<endl;
+		return;
+	}
+	//has path
+	//if(vPrevious[ID2]==ID1) cout<<"path from "<<ID1<<" to "<<ID2<<" : "<<ID1<<" "<<ID2<<endl;
+	long int iteratorOfPath = ID2;
+	cout<<"path from "<<ID1<<" to "<<ID2<<" : "<<ID1<<" ";
+	vector<long int> reversePath;
+	while(vPrevious[iteratorOfPath]!=ID1){
+		reversePath.push_back(vPrevious[iteratorOfPath]);
+		iteratorOfPath=vPrevious[iteratorOfPath];	
+	}
+	reverse(reversePath.begin(),reversePath.end());
+	for(int i=0;i<reversePath.size();i++){
+		cout<<reversePath[i]<<" ";
+	}
+	cout<<ID2<<endl;
 }
+
 //startTime: start shiKe curTime:daoDaDangQianDianDeShiKe
 void RoadNetwork::shortestPathDijkstraTimeDependent(int ID1, int ID2, int startTime)
 {
