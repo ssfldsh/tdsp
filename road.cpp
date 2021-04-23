@@ -61,7 +61,7 @@ void RoadNetwork::shortestPathDijkstraStatic(long int ID1, long int ID2)
 			//roadLength  self add
 			neighborRoadID = g.vNode[topNodeID].vNeighbor[i].neighborRoadID;
 			//if has speedprofile vX.size!=0
-			neighborLength = g.vRoad[neighborRoadID].length;
+			neighborLength = g.vRoad[neighborRoadID].time;
 
 			double d = vDistance[topNodeID] + neighborLength;
 			if(!vbVisited[neighborNodeID])
@@ -79,7 +79,7 @@ void RoadNetwork::shortestPathDijkstraStatic(long int ID1, long int ID2)
 		}
 	}
 
-	cout << "Shortest distance from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] << endl;
+	cout << "fastest time from " << ID1 << " to "  << ID2 << " is " << vDistance[ID2] <<"min"<<endl;
 	//no path
 	if(vPrevious[ID2]==-1) {
 		cout<<"path from "<<ID1<<" to "<<ID2<<" : "<<"no path"<<endl;
@@ -98,7 +98,7 @@ void RoadNetwork::shortestPathDijkstraStatic(long int ID1, long int ID2)
 	for(int i=0;i<reversePath.size();i++){
 		cout<<reversePath[i]<<" ";
 	}
-	cout<<ID2<<endl;
+	cout<<ID2<<endl<<endl;
 }
 
 //startTime: start shiKe curTime:daoDaDangQianDianDeShiKe

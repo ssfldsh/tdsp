@@ -15,6 +15,7 @@ typedef struct ROAD
 	long int		ID1, ID2;		
 	int		direction;	//A6
 	float	length;		//A13
+	double  time;
 	bool	isolated;
 	set<long int>	sNeighborRoad;	//connected road,include main 
 	vector<pair<double, double> > vpRoadDetail;	//Road line detail
