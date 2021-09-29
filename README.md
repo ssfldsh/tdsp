@@ -8,4 +8,4 @@ git add all
 
 Git branch push
 
-修改完文件要save
+修改完文件要save,add,commit
